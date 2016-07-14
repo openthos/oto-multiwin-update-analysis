@@ -30,7 +30,7 @@ export USER=$(whoami)
 ```sh
 source build/envsetup.sh
 
-lunch android_x86_64-eng
+lunch 7
 
 make -j16 iso_img
 ```
