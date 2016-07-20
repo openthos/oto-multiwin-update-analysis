@@ -30,7 +30,7 @@ export USER=$(whoami)
 ```sh
 source build/envsetup.sh
 
-lunch 7
+lunch 10
 
 make -j16 iso_img
 ```
