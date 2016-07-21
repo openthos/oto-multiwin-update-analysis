@@ -54,6 +54,7 @@ mMinimizeBtn.setOnClickListener(new OnClickListener() {
     public void onClick(View v) {
         // 当前实际窗口的大小
         Rect actualWindowSize = new Rect(mDecor.getViewRootImpl().mWinFrame);
+        // 设置新的窗口尺寸，使窗口移出屏幕
         Rect outOfScreen = new Rect(actualWindowSize.left + metrics.widthPixels,
                                     actualWindowSize.top + metrics.heightPixels,
                                     actualWindowSize.right + metrics.widthPixels,
