@@ -155,7 +155,7 @@ boolean setBoundsByForce(Rect bounds) {
 
 - DimLayer对象，用来实现阴影效果的Surface包装类对象。
 
-- 涉及代码：
+- android5.1x86涉及代码：
 
 ```
 void setBounds(Rect bounds) {
@@ -174,7 +174,7 @@ void setBounds(Rect bounds) {
 void adjustSurface(int layer, boolean inTransaction) {
     final int dw, dh;
     final float xPos, yPos;
-    if (!mStack.isFullscreen() || mStack.isCrappyRelayouted()) { // 若不是全屏
+    if (!mStack.isFullscreen() || mStack.isCrappyRelayouted()) {
         dw = mBounds.width();
         dh = mBounds.height();
         xPos = mBounds.left;
@@ -210,6 +210,56 @@ void adjustSurface(int layer, boolean inTransaction) {
     mLastBounds.set(mBounds);
     mLayer = layer;
 }
+```
+
+- android6.0x86涉及代码：
+
+```
+/** @param bounds The new bounds to set */
+void setBounds(Rect bounds) {
+    mBounds.set(bounds);
+    if (isDimming() && !mLastBounds.equals(bounds)) {
+        try {
+            SurfaceControl.openTransaction();
+            adjustBounds();
+        } catch (RuntimeException e) {
+            Slog.w(TAG, "Failure setting size", e); 
+        } finally {
+            SurfaceControl.closeTransaction();
+        }   
+    }   
+}   
+```
+
+```
+/**
+ * NOTE: Must be called with Surface transaction open.
+ */
+private void adjustBounds() {
+    final int dw, dh;
+    final float xPos, yPos;
+    if (!mStack.isFullscreen()) {
+        dw = mBounds.width();
+        dh = mBounds.height();
+        xPos = mBounds.left;
+        yPos = mBounds.top;
+    } else {
+        // Set surface size to screen size.
+        final DisplayInfo info = mDisplayContent.getDisplayInfo();
+        // Multiply by 1.5 so that rotating a frozen surface that includes this does not expose
+        // a corner.
+        dw = (int) (info.logicalWidth * 1.5);
+        dh = (int) (info.logicalHeight * 1.5);
+        // back off position so 1/4 of Surface is before and 1/4 is after.
+        xPos = -1 * dw / 6;
+        yPos = -1 * dh / 6;
+    }   
+
+    mDimSurface.setPosition(xPos, yPos);
+    mDimSurface.setSize(dw, dh);
+
+    mLastBounds.set(mBounds);
+}   
 ```
 
 ### 7.SurfaceControl.java分析
