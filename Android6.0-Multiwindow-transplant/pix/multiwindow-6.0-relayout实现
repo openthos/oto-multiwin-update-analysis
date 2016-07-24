@@ -1,0 +1,196 @@
+### relayoutWindow方法
+
+
+- IActivityManager.java 添加 relayoutWindow[1]的接口、Binder会用到一个键值常量
+
+        //IActivityManager.java
+        public boolean relayoutWindow(int stackId, Rect r)
+                                                  throws RemoteException;
+        int RELAYOUT_WINDOW_CORNERSTONE_TRANSACTION =
+                                        IBinder.FIRST_CALL_TRANSACTION+187;
+
+- ActivityManagerNative.java ，使用代理模式。首先在内部代理类ActivityManagerProxy（实现了IActivityManager）
+ 中添加relayoutWindow方法。代理类中的relayoutWindow通过Binder的机制调用主体类ActivityManagerNative的relayoutWindow。
+ ActivityManagerNative没有实现relayoutWindow，relayoutWindow具体实现推迟到ActivityManagerService中。
+
+      //ActivityManagerProxy， 添加方法实现。
+      /**
+        * Date: Feb 25, 2014
+        * Copyright (C) 2014 Tieto Poland Sp. z o.o.
+        *
+        * Change window position
+        */
+
+        @Override
+        public boolean relayoutWindow(int stackId, Rect r) throws RemoteException {
+          Parcel data = Parcel.obtain();
+          Parcel reply = Parcel.obtain();
+          data.writeInterfaceToken(IActivityManager.descriptor);
+          data.writeInt(stackId);
+          int flags = 0;
+          r.writeToParcel(data, flags);
+          mRemote.transact(RELAYOUT_WINDOW_CORNERSTONE_TRANSACTION, data, reply, 0);
+          reply.readException();
+          boolean[] ret = new boolean[1];
+          reply.readBooleanArray(ret);
+          data.recycle();
+          reply.recycle();
+          return ret[0];
+      }
+
+      //ActivityManagerNative，onTransact函数中添加。
+      case RELAYOUT_WINDOW_CORNERSTONE_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            int stackId = data.readInt();
+            Rect r = new Rect();
+            r.readFromParcel(data);
+            boolean[] ret = new boolean[1];
+            ret[0] = relayoutWindow(stackId, r);
+            reply.writeNoException();
+            reply.writeBooleanArray(ret);
+            return true;
+          }
+
+- ActivityManagerService.java 实现具体的relayoutWindow，调用wms中的relayoutWindow方法。
+
+      //ActivityManagerService，添加方法实现。
+          @Override
+          public boolean relayoutWindow(int stackId, Rect r) {
+                 /**
+                  * Date: Feb 25, 2014
+                  * Copyright (C) 2014 Tieto Poland Sp. z o.o.
+                  *
+                  * TietoTODO: add posibility to relayout only own window
+                  */
+                 long ident = Binder.clearCallingIdentity();
+                 try {
+                     Slog.v(TAG, "RelayoutWindow: " + stackId + " pos:" + r);
+                     mWindowManager.relayoutWindow(stackId, r);
+                 } finally {
+                     Binder.restoreCallingIdentity(ident);
+                 }
+                 return true;
+          }
+
+- WindowManagerService.java，relayoutWindow方法中调用DisplayContent.relayoutStack
+
+      //WindowManagerService中添加方法。
+      public boolean relayoutWindow(int stackId, Rect pos) {
+          synchronized (mWindowMap) {
+              final int numDisplays = mDisplayContents.size();
+              for (int displayNdx = 0; displayNdx < numDisplays; ++displayNdx) {
+                   if (mDisplayContents.valueAt(displayNdx).relayoutStack(stackId, pos)) {
+                           performLayoutAndPlaceSurfacesLocked();
+                           return true;
+                        }
+                    }
+                }
+           return false;
+       }
+- DisplayContent.java,relayoutStack 使用TaskStack的setBoundsByForce，参数为stackId。
+
+     DisplayContent添加relayoutStack
+    boolean relayoutStack(int stackId, Rect pos) {
+        for (int stackNdx = mStacks.size() - 1; stackNdx >= 0; --stackNdx) {
+            final TaskStack stack = mStacks.get(stackNdx);
+            if (stack.mStackId == stackId) {
+                // stack.setCrappyRelayouted(true);
+                layoutNeeded = true;
+                return stack.setBoundsByForce(pos);
+             }
+         }
+         return false;
+    }
+
+- TaskStack.java,/services/core/java/com/android/server/wm/TaskStack.java,
+6.0的TaskStack中已包含变量mFullScreen，在窗口绘制过程中，若为mFullScreen=true，
+会默认全屏，所以添加一个判断在非homeStack的情况下mFullScreen = false。
+
+      //添加判断当前stack是不是Homestack
+      private boolean isHomeStack() {
+          TaskStack stack = mDisplayContent.getHomeStack();
+          if ((stack != null) && (stack.mStackId == mStackId) ||  mStackId == 0) {
+              return true;
+          }
+          return false;
+      }
+
+      //强制限制stack边界。
+      boolean setBoundsByForce(Rect bounds) {
+          mDimLayer.setBounds(bounds);
+          mAnimationBackgroundSurface.setBounds(bounds);
+          mBounds.set(bounds);
+          return true;
+      }
+
+### computeStackFocus，ActivityStackSupervisor 使用relayoutWindow。
+在新建stack后，设置stack的属性是否为multiwindow，限制stack的大小。
+
+      //computeStackFocus中添加判断，若为多窗口，跳过查找可用stack操作，直接新建stack
+      /**
+      * add the function to get the flag about multiwindow
+      */
+      boolean isMultiwindow = false;
+      try {
+      isMultiwindow = ActivityManagerNative.getDefault().multiwindowEnabled();
+      } catch (RemoteException e) {
+      }
+
+      /**
+      * Date: Feb 27, 2014
+      * Copyright (C) 2014 Tieto Poland Sp. z o.o.
+      *
+      * TietoTODO: this loop returns first stack which is not a homestack
+      * Use the same stack for regular apps (non multiwindow).
+      */
+      if(!isMultiwindow){
+            final ActivityContainer container = r.mInitialActivityContainer;
+            if (container != null) {
+                .....
+
+
+      //computeStackFocus中添加，创建完stack后。
+        stack.setMultiwindowStack(isMultiwindow);
+        if(isMultiwindow){
+           relayoutTinyWindow(stack.mStackId,isMultiwindow,false);
+        }
+
+      //随机设置窗口大小（暂时），调用AMS的relayoutWindow。
+      final private void relayoutTinyWindow(int stackId,
+                                boolean isMultiwindow, boolean runFullScreen){
+           int edge = (int)(Math.random() * 300);
+           Rect defaultRandomRect = new Rect(edge, edge,
+                                                        800 + edge, 600 + edge);
+           Slog.d("umic","relayout window " + defaultRandomRect.toString()
+                                                    +  "stack Id " +  stackId );
+           mService.relayoutWindow(stackId, defaultRandomRect);
+       }
+
+      //services/core/java/com/android/server/am/ActivityStack.java，
+      添加 setMultiwindowStack方法，同时默认多窗口情况下，设置mFullscreen 为false。
+      /**
+       * Date: Apr 23, 2014
+       * Copyright (C) 2014 Tieto Poland Sp. z o.o.
+       *
+       * Check check if stack is contains activities which run in window.
+       */
+      public boolean isMultiwindowStack() {
+          return mIsMultiwindowStack;
+      }
+
+      public void setMultiwindowStack(boolean isMultiwindow) {
+          setMultiwindowStack(isMultiwindow, false);
+      }
+
+      public void setMultiwindowStack(boolean isMultiwindow, boolean isFullscreen){
+          mIsMultiwindowStack = isMultiwindow;
+          mFullscreen = isFullscreen;
+      }
+
+### ActivityStack mFullScreen属性。
+
+- mFullScreen，依据ActivityRecord的所对应的Task的mResizeable属性设置，
+若mResizeable = fasle，mFullScreen会被调整为true。因此不仅仅要设置mFullScreen为false，
+同时还要设置mResizeable = true。
+
+- 现在的做法是在TaskRecord 新建的时候强制设为true（暂时）。
