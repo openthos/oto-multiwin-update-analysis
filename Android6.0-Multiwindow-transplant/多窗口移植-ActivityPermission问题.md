@@ -1,0 +1,1 @@
+## 在ActivityStackSupervisor.java中进行更改，给相应的Activity添加特定的permission，

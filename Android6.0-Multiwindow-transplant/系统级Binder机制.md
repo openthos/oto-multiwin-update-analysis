@@ -13,7 +13,7 @@
 
 - 客户端：客户端要想访问远程服务，必须获取远程服务在Binder对象中对应的mRemote引用
 
-![default](Binder.PNG)
+![default](pix/Binder.PNG)
 
 ## trasact()与onTrasact()方法
 trasact方法共有四个参数，分别是标识code、传输输入data、返回数据reply、flag

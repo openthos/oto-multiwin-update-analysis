@@ -47,9 +47,21 @@ pointer_arrow_updown.xml
 
 ### services/core/java/com/android/server/input/InputManagerService.java
 - 添加了nativeSetPointerIcon用于调用C++层的代码，设置PointerIcon
-
+2
 - 添加了setPointerIcon方法，方法主要是调用nativeSetPointerIcon函数
 
 - 添加nativeSetPointerIcon函数
 
 - 对gInputManagerMethods[]的更改
+
+### PhoneWindow.java
+- 设置了多窗口下改变窗口的9种情况 无、上、下、左、右、左上、右上、左下、右下
+- 添加了hover方法，当鼠标hover到窗口边框时，会改变鼠标的样式
+- 对于border 添加了touchListener监听对于边框的拖动的改变
+
+## 边框拖拉缩放
+- 基于Android5.1的multiwindow在拖拉边框的时候，会有一个边框的显示，其本质就是在最上面启动了一个透明的Activity，叫做LineRect,然后在透明的Activity上面绘图，但是这个做法在Android6.0中会造成程序崩溃、绘制延迟等问题，所以暂时先屏蔽了绘框的功能，但是也能够拖拉变换窗口大小
+
+## 最大化与正常切换问题
+- 在基于Android5.1开发的multiwindow中，对于边框的绘制使用的是自己写的relayoutWindow方法，但是在Android6.0中使用了系统提供的resizeStack方法，后者的方法在变换窗口大小的时候会重新位置使PhoneWindow等重新位置，但是如果只是移动位置的话是不会重新位置的，Android5。1开发的multiwindow不会重新把PhoneWindow绘制
+所以最大化与正常之间的切换，oldWindowSize的存放可以在PhoneWindow中，但是Android6.0不行，在AMS中添加了一个StackId与Rect对应的map，并添加了对Map中数据set 与 get 的方法，这样就不会丢失了
