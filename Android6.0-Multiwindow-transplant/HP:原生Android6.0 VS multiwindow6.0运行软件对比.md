@@ -2,7 +2,6 @@
 | :------------ |:---------------:| :-----:|
 | Adobe_Acrobat_DC_1466566810724      | 可运行，但是过了导航页点击continue就崩溃了 | $1600 |
 | AngryBirds_6102      | OK        |   $12 |
-| app-debug-unaligned | are neat        |    $1 |
 | com.futuremark.dmandroid.application | OK        |    $1 |
 | com.microsoft.office.excel | OK        |    $1 |
 | com.microsoft.office.onenote | 不可运行        |    $1 |
