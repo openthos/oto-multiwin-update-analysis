@@ -7,7 +7,6 @@
 | com.microsoft.office.onenote | 不可运行        |    不可运行 |
 | com.microsoft.office.outlook | OK        |    OK |
 | com.microsoft.office.powerpoint | OK        |    OK |
-
 | com.microsoft.office.word-2 | OK        |    OK |
 | CZFileManager_1.4.1 | OK        |    OK |
 | es文件浏览器_1466564617570 | OK        |    OK |
