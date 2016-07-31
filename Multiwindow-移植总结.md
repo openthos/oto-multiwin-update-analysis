@@ -22,7 +22,7 @@
 
 ## 软件支持
 原生Android6.0-x86支持的软件在目前的multiwindow6.0上面都能运行，下面是在HP机器上面做的测试报告
-[HP:原生Android6.0 VS multiwindow6.0运行软件对比.md](https://github.com/openthos/oto-multiwin-update/blob/master/Android6.0-Multiwindow-transplant/HP:%E5%8E%9F%E7%94%9FAndroid6.0%20VS%20multiwindow6.0%E8%BF%90%E8%A1%8C%E8%BD%AF%E4%BB%B6%E5%AF%B9%E6%AF%94.md)
+- [HP:原生Android6.0 VS multiwindow6.0运行软件对比.md](https://github.com/openthos/oto-multiwin-update/blob/master/Android6.0-Multiwindow-transplant/HP:%E5%8E%9F%E7%94%9FAndroid6.0%20VS%20multiwindow6.0%E8%BF%90%E8%A1%8C%E8%BD%AF%E4%BB%B6%E5%AF%B9%E6%AF%94.md)
 
 ## 存在问题
 目前的多窗口操作系统还是有一些问题需要解决，对于Android5.1移植的过程中出现的问题在以下链接文档中：
