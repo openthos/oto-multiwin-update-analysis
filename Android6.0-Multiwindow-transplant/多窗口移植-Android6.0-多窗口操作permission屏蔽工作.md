@@ -1,5 +1,1 @@
-# permission屏蔽工作
-在进行多窗口操作时，有的permission需要开放，之前Android5.1-multiwindow的实现是直接在WMS对应的方法中注释掉checkCallingPermission的调用，这样做特别麻烦也需要更改大量的代码
 
-## 改进
-在WMS中定义了一个mFilterPermissions的私有字符串数组，把要屏蔽的permission放到这里面来，在checkCallingPermission中做统一过滤，这样也便于后期做其它的限制
