@@ -1,4 +1,5 @@
-# TaskStack.java-mIsFloating 问题
+# TaskStack.java-标识多窗口问题问题
+在Android中，一个ActivityStack对应着一个TaskStack，一个管理逻辑，一个管理界面绘制，所以在TaskStack中也有标识多窗口的标志
 
 ## Android5.1-multiwindow中
 
