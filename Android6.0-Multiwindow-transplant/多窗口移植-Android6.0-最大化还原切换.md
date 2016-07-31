@@ -1,1 +1,6 @@
-
+# 最大化与正常切换问题
+- 在基于Android5.1开发的multiwindow中，对于边框的绘制使用的是自己写的relayoutWindow方法，但是在Android6.0中使用了系统提供的resizeStack方法
+后者的方法在变换窗口大小的时候会重新刷新使PhoneWindow等重新设置，但是如果只是移动位置的话是不会重新设置
+- Android5.1开发的multiwindow不会重新把PhoneWindow绘制
+- 所以最大化与正常之间的切换，multiwindow5.1可以把oldWindowSize的存放可以在PhoneWindow中，但是multiwindow6.0不行,
+在AMS中添加了一个StackId与Rect对应的map并添加了对Map中数据set 与 get 的方法，这样就不会丢失了
