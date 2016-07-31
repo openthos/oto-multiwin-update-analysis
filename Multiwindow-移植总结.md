@@ -8,8 +8,7 @@
 - 设计实现
 
 ## 项目简介
-对于原生Android6.0-x86与原生Android5.1-x86的对比分析，并参考分析基于Android5.1-x86实现的multiwindow，基于Android6.0-x86实现简易的多窗口
-操作系统
+对于原生Android6.0-x86与原生Android5.1-x86的对比分析，并参考分析基于Android5.1-x86实现的multiwindow，基于Android6.0-x86实现简易的多窗口操作系统
 
 ## 功能需求
 |完成|描述|
@@ -33,11 +32,11 @@
 
 ## multiwindow5.1分析
 - 对于基于Android5.1实现的multiwindow的分析并没有很全面，只是选取了有用的进行了分析，分析文档在
-[multiwindow5.1分析文档]https://github.com/openthos/oto-multiwin-update/tree/master/Android5.1-Multiwindow-analyze
+[multiwindow5.1分析文档](https://github.com/openthos/oto-multiwin-update/tree/master/Android5.1-Multiwindow-analyze)
 
 ## 设计实现
 - 包括了对于原生Android6.0的部分机制的分析，和基于Android6.0开发的multiwindow的设计实现文档
-[multiwindow6.0设计文档]https://github.com/openthos/oto-multiwin-update/tree/master/Android6.0-Multiwindow-transplant
+[multiwindow6.0设计文档](https://github.com/openthos/oto-multiwin-update/tree/master/Android6.0-Multiwindow-transplant)
 
 
 
