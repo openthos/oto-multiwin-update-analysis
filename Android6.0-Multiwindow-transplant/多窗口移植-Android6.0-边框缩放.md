@@ -61,7 +61,3 @@ pointer_arrow_updown.xml
 
 ## 边框拖拉缩放
 - 基于Android5.1的multiwindow在拖拉边框的时候，会有一个边框的显示，其本质就是在最上面启动了一个透明的Activity，叫做LineRect,然后在透明的Activity上面绘图，但是这个做法在Android6.0中会造成程序崩溃、绘制延迟等问题，所以暂时先屏蔽了绘框的功能，但是也能够拖拉变换窗口大小
-
-## 最大化与正常切换问题
-- 在基于Android5.1开发的multiwindow中，对于边框的绘制使用的是自己写的relayoutWindow方法，但是在Android6.0中使用了系统提供的resizeStack方法，后者的方法在变换窗口大小的时候会重新位置使PhoneWindow等重新位置，但是如果只是移动位置的话是不会重新位置的，Android5。1开发的multiwindow不会重新把PhoneWindow绘制
-所以最大化与正常之间的切换，oldWindowSize的存放可以在PhoneWindow中，但是Android6.0不行，在AMS中添加了一个StackId与Rect对应的map，并添加了对Map中数据set 与 get 的方法，这样就不会丢失了
