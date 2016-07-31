@@ -35,7 +35,7 @@
 [multiwindow5.1分析文档](https://github.com/openthos/oto-multiwin-update/tree/master/Android5.1-Multiwindow-analyze)
 
 ## 设计实现
-- 包括了对于原生Android6.0的部分机制的分析，和基于Android6.0开发的multiwindow的设计实现文档
+- 包括了对于原生Android6.0的部分机制的分析，和基于Android6.0开发的multiwindow的设计实现文档,带有“多边框移植”开头的文件都是移植的设计与实现文档
 [multiwindow6.0设计文档](https://github.com/openthos/oto-multiwin-update/tree/master/Android6.0-Multiwindow-transplant)
 
 
