@@ -3,8 +3,8 @@
 ## Activity.java:
 - performCreate方法中添加setWindowAttributes()主要是对window的stackId与stackId进行设置，主要用途是多窗口中resize窗口时需要获得stackId，而单窗口不需要进行resize（但是在这个patch中是直接设置的没有写这个方法）
 
-## IActivityManager.java:
-### 添加了用于Binder通信的code：
+### IActivityManager.java:
+添加了用于Binder通信的code：
 - RELAYOUT_WINDOW_CORNERSTONE_TRANSACTION（Transaction for changing window position）
 
 - CLOSE_ACTIVITY_WITH_WINDOW_TRANSACTION（Transaction for closing application in window）
