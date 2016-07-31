@@ -1,23 +1,18 @@
 # 基于Android6.0实现multiwindow的focus
 
-## ActivityStackSupervisor.java
-- 添加了isMultiwindow的变量，用来标识是否处于multiwindow状态下
+### setFocuseStack
 
-### computeStackFocus
-- computeStackFocus函数中如果处于多窗口的话跳过一段代码，这个代码的主要作用是返回第一个非homeStack的stack，只有把这段代码跳过才能在屏幕上显示多个窗口，要不然会代替掉前面的stack
-
-## TaskStack.java
-
-### mFullscreen
-- mFullscreen标识这个窗口是否是全屏的
-
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+因为当把APP窗口缩小时，点击桌面会focus桌面，所以一旦focus桌面，就会造成隐藏掉打开的多个窗口，这样不符合多窗口的特性，所以在focuse时过滤掉对于HomeActivity的显示到最前面
 
 ## ActivityManagerService.java
-
 ### setFocuseStack
-- 因为当把APP窗口缩小时，点击桌面的APP也会因为touch到桌面而focus桌面，所以一旦点击APP就会focus桌面，在focuse时过滤掉对于HomeActivity的显示到最前面，这样能解决在多窗口时打开一个新的APP不会切回到桌面，而是直接打开
+- 这个方法就是通过StackId来focus不同的ActivityStack，Android5.1与Android6.0在这方面的机制又有所不同了，虽然在AMS中都有同样的方法，但是5.1中最终只调用了一个方法来focused 不同的ActivityStack，而6.0中把focus与真实的显示都最前面的两个函数分开了，所以在6.0中只是屏蔽了后面的真实显示到最前面的函数还是依旧focus，避免了5.1的很多做法（5.1屏蔽了桌面的focus，所以在TaskStack中有标识是否处于桌面的标志，而桌面其实并没有得到focus）在多出有代码的修改，这样难免会造成漏洞，6.0的避免了这个问题。
+- AMS中其实还是调用到了ActvityStackSupervisor.java的方法来进行focus，但是5.1与6.0在这个方法上面有修改
 
-- 这种做法在从launch直接返回桌面时，会直接回到桌面，但是在点击打开APP时还是会把所有的APP都同时显示出来，因为桌面放到了最后面，相当于桌面的Z轴变换，但是因为导航栏最后还是会隐藏掉，所以这个问题就可以不care了
+## ActivityStackSupervisor.java
+### setFocusedStack
+- Android5.1中对于这个方法最终就是调用moveHomeStack来进行focus的显示切换，因为这种特性所以无法做到focus不同的ActivityStack，所以新加了多个方法进行单个ActivityStack的focus，其实就是最终调用了moveToFront方法，不过做了桌面与其它的不同判断
 
-- 目前看来，只是在多窗口情况下屏蔽了对于homeActivity显示到最前面的步骤，所以不会对整体造成影响
+- 6.0中，这个方法最终就只直接调用了moveToFront，所以与5·1的机制不同，就没有做了修改
+
+目前看来，只是在多窗口情况下屏蔽了对于homeActivity显示到最前面的步骤，所以不会对整体造成影响
