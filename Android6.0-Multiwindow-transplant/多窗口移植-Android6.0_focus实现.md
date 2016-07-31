@@ -16,3 +16,7 @@
 - 6.0中，这个方法最终就只直接调用了moveToFront，所以与5·1的机制不同，就没有做了修改
 
 目前看来，只是在多窗口情况下屏蔽了对于homeActivity显示到最前面的步骤，所以不会对整体造成影响
+
+## 补充
+### PhoneWindow.java
+- 点击多窗口模式下窗口的header可以拖拉，但是这时没有focus，所以在PhoneWindow.Java中添加了setFocus的方法，当点击窗口Header时就会focus这个窗口
