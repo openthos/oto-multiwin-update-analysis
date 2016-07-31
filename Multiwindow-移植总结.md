@@ -4,6 +4,7 @@
 - 功能需求
 - 软件支持
 - 存在问题
+- multiwindow5.1分析
 - 设计实现
 
 ## 项目简介
@@ -29,6 +30,14 @@
 - [多窗口边框拖拉程序LineRect在Android6.0上面的问题解决.md](https://github.com/openthos/oto-multiwin-update/blob/master/Android6.0-Multiwindow-transplant/%E5%A4%9A%E7%AA%97%E5%8F%A3%E7%A7%BB%E6%A4%8D-%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98.md)
 
 - [多窗口移植-遗留问题.md](https://github.com/openthos/oto-multiwin-update/blob/master/Android6.0-Multiwindow-transplant/%E5%A4%9A%E7%AA%97%E5%8F%A3%E8%BE%B9%E6%A1%86%E6%8B%96%E6%8B%89%E7%A8%8B%E5%BA%8FLineRect%E5%9C%A8Android6.0%E4%B8%8A%E9%9D%A2%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3.md)
+
+## multiwindow5.1分析
+- 对于基于Android5.1实现的multiwindow的分析并没有很全面，只是选取了有用的进行了分析，分析文档在
+[multiwindow5.1分析文档]https://github.com/openthos/oto-multiwin-update/tree/master/Android5.1-Multiwindow-analyze
+
+## 设计实现
+- 包括了对于原生Android6.0的部分机制的分析，和基于Android6.0开发的multiwindow的设计实现文档
+[multiwindow6.0设计文档]https://github.com/openthos/oto-multiwin-update/tree/master/Android6.0-Multiwindow-transplant
 
 
 
