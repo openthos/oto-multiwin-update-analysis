@@ -4,3 +4,6 @@
 - Android5.1开发的multiwindow不会重新把PhoneWindow绘制
 - 所以最大化与正常之间的切换，multiwindow5.1可以把oldWindowSize的存放可以在PhoneWindow中，但是multiwindow6.0不行,
 在AMS中添加了一个StackId与Rect对应的map并添加了对Map中数据set 与 get 的方法，这样就不会丢失了
+
+--　补充
+窗口位置等信息可以存在数据库中，便于下次打开的位置大小等与以前一致．　chy
