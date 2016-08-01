@@ -4,9 +4,9 @@
 这样有利于后期的添加和更改
 - 改进：wms下checkCallingPermission会调用过程为 
 
-    wms.checkCallingPermission
-    ->context.checkCallingPermission->checkPermission
-    ->ams.checkPermission
-    ->ActivityManager.checkComponentPermission
+        wms.checkCallingPermission
+        ->context.checkCallingPermission->checkPermission
+        ->ams.checkPermission
+        ->ActivityManager.checkComponentPermission
 
 将WMS中定义了一个私有变量mFilterPermission移动到ActivityManager中，在checkComponentPermission添加权限的过滤（开放了权限）。
