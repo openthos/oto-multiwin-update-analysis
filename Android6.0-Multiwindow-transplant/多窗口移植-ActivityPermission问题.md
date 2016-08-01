@@ -9,4 +9,4 @@
         ->ams.checkPermission
         ->ActivityManager.checkComponentPermission
 
-将WMS中定义了一个私有变量mFilterPermission移动到ActivityManager中，在checkComponentPermission添加权限的过滤（开放了权限）。
+  将WMS中定义了一个私有变量mFilterPermission移动到ActivityManager中，在checkComponentPermission添加权限的过滤（开放了权限）。
