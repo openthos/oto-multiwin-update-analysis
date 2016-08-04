@@ -13,4 +13,6 @@ JACKVMCOMMAND="java -Dfile.encoding=UTF-8 -Xms2560m -XX:+TieredCompilation -jar 
 
 这是由于docker没有设置USER环境变量导致，手动添加后继续编译即可
 
+`export USER=chyyuu`
+
 
