@@ -1,4 +1,16 @@
 # Android6.0-重新编译问题
 
-之前编译时在lunch阶段选择的是7，这个会造成开机时wallpaper异常崩溃，也会造成在AMS中添加新的方法read出错
-当重新换成lunch 10编译时，会在开机启动时报错，要记得先make clean在重新编译其它的
+
+## 选择x86 
+之前编译时在lunch阶段选择的是7(x86_64)，这个会造成开机时wallpaper异常崩溃，也会造成在AMS中添加新的方法read出错
+当重新换成lunch 10(x86)编译时，会在开机启动时报错，要记得先make clean在重新编译其它的
+
+
+## 其他问题
+1. USER问题
+
+JACKVMCOMMAND="java -Dfile.encoding=UTF-8 -Xms2560m -XX:+TieredCompilation -jar out/host/linux-x86/framework/jack-launcher.jar " JACK_JAR="out/host/linux-x86/framework/jack.jar" out/host/linux-x86/bin/jack-admin start-server out/host/linux-x86/bin/jack-admin: line 27: USER: unbound variable
+
+这是由于docker没有设置USER环境变量导致，手动添加后继续编译即可
+
+
