@@ -10,7 +10,7 @@
 ## 3. WindowManagerService.java
 - 执行relayoutWindow(int stackId, Rect pos)方法，在该方法中调用了DisplayContent对象中的relayoutStack(int stackId, Rect pos)方法；
 
-## 4. DisplayConent.java
+## 4. DisplayContent.java
 - 执行relayoutStack(int stackId, Rect pos)方法，在该方法中调用了TaskStack对象中的setBoundsByForce(Rect bounds)方法；
 
 ## 5. TaskStack.java
